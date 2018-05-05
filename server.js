@@ -4,14 +4,14 @@ var logger = require("morgan");
 var mongoose = require("mongoose");
 var request = require("request");
 
-// var axios = require("axios");
+var axios = require("axios");
 var cheerio = require("cheerio");
 
-// var db = require("./models");
+var db = require("./models");
 
 // var PORT = 3000;
 
- var app = express();
+var app = express();
 
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true}));
@@ -33,7 +33,21 @@ db.once('open', function() {
     console.log('Mongoose connection successful.');
 });
 
+app.get("/scrape", function(req, res){
+    axios.get("http://www.spiegel.de/international/").then(function(response){
+        var $ = cheerio.load(response.data);
+        $('div.teaser').each(function(i,element) {
+            var result = {};
 
+            result.section = $(this)
+            .children()
+            .find("span.headline-intro")
+            .text()
+            .trim();
+        })
+    })
+    console.log(response)
+});
 
 
 
