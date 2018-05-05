@@ -1,16 +1,17 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var logger = require("morgan");
-var mongoose = require("monogoose");
+var mongoose = require("mongoose");
+var request = require("request");
 
-var axios = require("axios");
+// var axios = require("axios");
 var cheerio = require("cheerio");
 
-var db = require("./models");
+// var db = require("./models");
 
-var PORT = 3000;
+// var PORT = 3000;
 
-var app = express();
+ var app = express();
 
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true}));
@@ -31,6 +32,8 @@ db.on('error', function(err) {
 db.once('open', function() {
     console.log('Mongoose connection successful.');
 });
+
+
 
 
 
