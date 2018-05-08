@@ -11,7 +11,7 @@ The deployed app: https://anewscraper.herokuapp.com/
 
 ## Screenshot of the App
 
-
+![image](https://user-images.githubusercontent.com/34113550/39734217-3958bb32-5244-11e8-86d3-e1118b5d4489.png)
 
 ## Technologies Used
 The following technologies were used:
