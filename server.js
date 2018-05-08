@@ -1,25 +1,25 @@
-var express = require("express");
-var bodyParser = require("body-parser");
-var logger = require("morgan");
-var mongoose = require("mongoose");
+var express = require("express"); //
+var bodyParser = require("body-parser"); // 
+var logger = require("morgan"); // 
+var mongoose = require("mongoose"); //
 var request = require("request");
 
-var axios = require("axios");
-var cheerio = require("cheerio");
+var axios = require("axios"); //
+var cheerio = require("cheerio"); //
 
-var db = require("./models");
+var db = require("./models"); // 
 
-var PORT = 3000;
+var PORT = process.env.PORT || 3000; //
 
-var app = express();
+var app = express();//
 
-app.use(logger('dev'));
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public'));
+app.use(logger('dev'));//
+app.use(bodyParser.urlencoded({ extended: true }));//
+app.use(express.static('public'));//
 
-mongoose.connect("mongodb://localhost/aNewscraper");
+//mongoose.connect("mongodb://localhost/aNewscraper");
 
-var databaseUri = 'mongodb://localhost/week18day3mongoose';
+var databaseUri = 'mongodb://localhost/aNewscraper';//
 if (process.env.MONGODB_URI) {
     mongoose.connect(process.env.MONGODB_URI);
 } else {
@@ -34,6 +34,16 @@ db.on('error', function (err) {
 db.once('open', function () {
     console.log('Mongoose connection successful.');
 });
+
+// If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+
+// Set mongoose to leverage built in JavaScript ES6 Promises
+// Connect to the Mongo DB
+mongoose.Promise = Promise; //
+mongoose.connect(MONGODB_URI); {
+    useMongoClient: true
+} //
 
 app.get("/scrape", function (req, res) {
         axios.get("http://www.businessinsider.com/thelife").then(function (response) {
@@ -60,7 +70,7 @@ app.get("/scrape", function (req, res) {
                     console.log(dbArticle);
                 })
                 .catch(function (err) {
-                    return res.json(err);
+                    res.json(err);
                 });
         });
 
