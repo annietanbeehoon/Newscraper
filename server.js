@@ -11,32 +11,14 @@ var db = require("./models"); //
 
 var PORT = process.env.PORT || 3000; //
 
+// If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/aNewscraper";
+
 var app = express();//
 
 app.use(logger('dev'));//
-app.use(bodyParser.urlencoded({ extended: true }));//
+app.use(bodyParser.urlencoded({ extended: false }));//
 app.use(express.static('public'));//
-
-//mongoose.connect("mongodb://localhost/aNewscraper");
-
-var databaseUri = 'mongodb://localhost/aNewscraper';//
-if (process.env.MONGODB_URI) {
-    mongoose.connect(process.env.MONGODB_URI);
-} else {
-    mongoose.connect(databaseUri);
-}
-
-var db = mongoose.connection;
-
-db.on('error', function (err) {
-    console.log('Mongoose Error: ', err);
-});
-db.once('open', function () {
-    console.log('Mongoose connection successful.');
-});
-
-// If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
 
 // Set mongoose to leverage built in JavaScript ES6 Promises
 // Connect to the Mongo DB
@@ -45,8 +27,30 @@ mongoose.connect(MONGODB_URI); {
     useMongoClient: true
 } //
 
+// mongoose.connect("mongodb://localhost/aNewscraper");
+
+// var databaseUri = 'mongodb://localhost/aNewscraper';//
+// if (process.env.MONGODB_URI) {
+//     mongoose.connect(process.env.MONGODB_URI);
+// } else {
+//     mongoose.connect(databaseUri);
+// }
+
+// var db = mongoose.connection;
+
+// db.on('error', function (err) {
+//     console.log('Mongoose Error: ', err);
+// });
+// db.once('open', function () {
+//     console.log('Mongoose connection successful.');
+// });
+
+
+
+
+
 app.get("/scrape", function (req, res) {
-        axios.get("http://www.businessinsider.com/thelife").then(function (response) {
+    axios.get("http://www.businessinsider.com/thelife").then(function (response) {
         var $ = cheerio.load(response.data);
         $("h3").each(function (i, element) {
             var result = {};
@@ -63,7 +67,7 @@ app.get("/scrape", function (req, res) {
                 .find(".river-image")
                 .children("img")
                 .attr("src")
-            
+
 
             db.Article.create(result)
                 .then(function (dbArticle) {
@@ -116,18 +120,18 @@ app.post("/articles/:id", function (req, res) {
             res.json(err);
         });
 
-app.post("article/:id", function(req, res){
-    db.Note.findOneAndRemove({ _id: req.params.id }, {note: dbNote._id})
-    .then(function(dbNote) {
-        return db.Article.findOneAndUpdate({_id: req.params.id}, {note: dbNote._id}, {new: true});
-    })
-    .then(function(dbArticle){
-        res.json(dbArticle);
-    })
-    .catch(function(err){
-        res.json(err);
+    app.post("article/:id", function (req, res) {
+        db.Note.findOneAndRemove({ _id: req.params.id }, { note: dbNote._id })
+            .then(function (dbNote) {
+                return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
+            })
+            .then(function (dbArticle) {
+                res.json(dbArticle);
+            })
+            .catch(function (err) {
+                res.json(err);
+            });
     });
-});
 
 });
 app.listen(PORT, function () {
