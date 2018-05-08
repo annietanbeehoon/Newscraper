@@ -55,7 +55,7 @@ $(document).on("click", "p", function(){
       var thisId = $(this).attr('data-id');
     
       $.ajax({
-          method: "POST",
+          method: "DELETE",
           url: "/articles/" + thisId,
           data: {
               body: $("#bodyinput").val()

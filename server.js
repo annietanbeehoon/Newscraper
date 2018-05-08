@@ -123,7 +123,7 @@ app.post("/articles/:id", function (req, res) {
     app.post("article/:id", function (req, res) {
         db.Note.findOneAndRemove({ _id: req.params.id }, { note: dbNote._id })
             .then(function (dbNote) {
-                return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
+                return db.Article.findOneAndRemove({ _id: req.params.id }, { note: dbNote._id }, { new: true });
             })
             .then(function (dbArticle) {
                 res.json(dbArticle);
