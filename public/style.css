@@ -1,0 +1,76 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+}
+body {
+    background-color: black;
+    color: antiquewhite;
+}
+a {
+    color: white;
+    text-decoration-line: none
+}
+a:link {
+    color: #cc0000;
+}
+    a:visited {
+    color: #999999;
+}
+    a:hover {
+    color: #ff3300;
+}
+.jumbotron {
+    text-align: center;
+    padding: 50px;
+    margin: auto;
+    color: white;
+    background-color: red
+}
+a {
+    text-align: center;
+    font-size: 15px;
+    height: 50px;
+    color: black;
+}
+button {
+    color: black;
+    font-size: 10px;
+    height: 25px;
+}
+.newsarea {
+    width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 5%;
+
+}
+
+#articles {
+    display: inline-block;
+    width: 60%;
+    height: 700px;
+
+}
+
+#notes {
+float: right;
+width: 30%;
+}
+
+textarea, input {
+    display: block;
+    width: 100%;
+    background-color: white;
+    color: black;
+}
+input {
+    height: 36px;
+    font-size: 24px;
+    color: black;
+}
+textarea {
+    height: 200px;
+    font-size: 18px;
+    color: black;
+}
+
