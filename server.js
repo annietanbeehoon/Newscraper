@@ -19,21 +19,21 @@ app.use(express.static('public'));
 
 mongoose.connect("mongodb://localhost/aNewscraper");
 
-// var databaseUri = 'mongodb://localhost/week18day3mongoose';
-// if (process.env.MONGODB_URI) {
-//     mongoose.connect(process.env.MONGODB_URI);
-// } else {
-//     mongoose.connect(databaseUri);
-// }
+var databaseUri = 'mongodb://localhost/week18day3mongoose';
+if (process.env.MONGODB_URI) {
+    mongoose.connect(process.env.MONGODB_URI);
+} else {
+    mongoose.connect(databaseUri);
+}
 
-// var db = mongoose.connection;
+var db = mongoose.connection;
 
-// db.on('error', function (err) {
-//     console.log('Mongoose Error: ', err);
-// });
-// db.once('open', function () {
-//     console.log('Mongoose connection successful.');
-// });
+db.on('error', function (err) {
+    console.log('Mongoose Error: ', err);
+});
+db.once('open', function () {
+    console.log('Mongoose connection successful.');
+});
 
 app.get("/scrape", function (req, res) {
         axios.get("http://www.businessinsider.com/thelife").then(function (response) {
