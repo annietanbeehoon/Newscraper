@@ -19,8 +19,8 @@ $(document).on("click", "p", function(){
         $("#notes").append("<button data-id='" + data._id + "' id='savenote'>Save Note</button>");
 
         if (data.note) {
-            $("#titleinput").val(data.note.title);
-            $("#bodyinput").val(data.note.body);
+            $("#notes").append("<h2>" + "Previous Notes" + "</h2>");
+            $("#notes").append("<p>" + data.note.body + "</p>");
             $('#notes').append("<button data-id='" + data._id + "' id='deletenote'>Delete note</button>");
         }
     });
@@ -55,7 +55,7 @@ $(document).on("click", "p", function(){
       var thisId = $(this).attr('data-id');
     
       $.ajax({
-          method: "DELETE",
+          method: "POST",
           url: "/articles/" + thisId,
           data: {
               body: $("#bodyinput").val()
@@ -66,7 +66,5 @@ $(document).on("click", "p", function(){
           console.log(data);
           $('#notes').empty();
       });
-      $('#bodyinput').val(" ");
+      $('#bodyinput').val("");
     });
-
-

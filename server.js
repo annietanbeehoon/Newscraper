@@ -45,10 +45,6 @@ mongoose.connect(MONGODB_URI); {
 //     console.log('Mongoose connection successful.');
 // });
 
-
-
-
-
 app.get("/scrape", function (req, res) {
     axios.get("http://www.businessinsider.com/thelife").then(function (response) {
         var $ = cheerio.load(response.data);
@@ -61,12 +57,8 @@ app.get("/scrape", function (req, res) {
             result.link = $(this)
                 .children("a")
                 .attr("href");
-            result.img = $(this)
-                .parent()
-                .find("a")
-                .find(".river-image")
-                .children("img")
-                .attr("src")
+            
+
 
 
             db.Article.create(result)
@@ -84,7 +76,6 @@ app.get("/scrape", function (req, res) {
 });
 
 app.get("/articles", function (req, res) {
-
     db.Article.find({})
         .then(function (dbArticle) {
             res.json(dbArticle);
@@ -120,18 +111,33 @@ app.post("/articles/:id", function (req, res) {
             res.json(err);
         });
 
-    app.post("article/:id", function (req, res) {
-        db.Note.findOneAndRemove({ _id: req.params.id }, { note: dbNote._id })
-            .then(function (dbNote) {
-                return db.Article.findOneAndRemove({ _id: req.params.id }, { note: dbNote._id }, { new: true });
-            })
-            .then(function (dbArticle) {
-                res.json(dbArticle);
-            })
-            .catch(function (err) {
-                res.json(err);
-            });
+app.post("article/:id", function (req, res) {
+    db.Note.findOneAndRemove({ _id: req.params.id }, { note: dbNote._id })
+        .then(function (dbNote) {
+            return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
+        })
+        .then(function (dbArticle) {
+            res.json(dbArticle);
+        })
+        .catch(function (err) {
+            res.json(err);
+        });
     });
+       
+app.post("/submit", function(req, res) {
+    db.Article.create(req.body)
+        .then(function(dbNote) {
+        return db.Article.findOneAndUpdate({}, { $push: { notes: dbNote._id } }, { new: true });
+      })
+      .then(function(dbUser) {
+        // If the User was updated successfully, send it back to the client
+        res.json(dbUser);
+      })
+      .catch(function(err) {
+        // If an error occurs, send it back to the client
+        res.json(err);
+      });
+  });
 
 });
 app.listen(PORT, function () {
